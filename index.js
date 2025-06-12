@@ -1,0 +1,17 @@
+import{a as w,S as v,i}from"./assets/vendor-CrlV4O_2.js";(function(){const o=document.createElement("link").relList;if(o&&o.supports&&o.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))s(r);new MutationObserver(r=>{for(const n of r)if(n.type==="childList")for(const l of n.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&s(l)}).observe(document,{childList:!0,subtree:!0});function e(r){const n={};return r.integrity&&(n.integrity=r.integrity),r.referrerPolicy&&(n.referrerPolicy=r.referrerPolicy),r.crossOrigin==="use-credentials"?n.credentials="include":r.crossOrigin==="anonymous"?n.credentials="omit":n.credentials="same-origin",n}function s(r){if(r.ep)return;r.ep=!0;const n=e(r);fetch(r.href,n)}})();const B="50461526-1c4ae7086be4914a89297c276",I="https://pixabay.com/api/";async function f(t,o=1,e=40){try{return(await w.get(I,{params:{key:B,q:t,image_type:"photo",orientation:"horizontal",safesearch:!0,per_page:e,page:o}})).data}catch(s){throw new Error(`Pixabay API Hatası: ${s.message}`)}}const P=document.querySelector("#results-container"),g=document.getElementById("load-more-btn");let d=null;function h(t){const o=t.hits.map(e=>`
+    
+      <a class="image-card" href="${e.largeImageURL}">
+        <img src="${e.webformatURL}" alt="${e.tags}" />
+        <div class="image-info">
+          <p class="tags">Tags: ${e.tags}</p>
+          <div class="stats">
+            <span>👍 ${e.likes}</span>
+            <span>👁️ ${e.views}</span>
+            <span>💬 ${e.comments}</span>
+            <span>⬇️ ${e.downloads}</span>
+          </div>
+        </div>
+      </a>
+    
+  `).join("");P.insertAdjacentHTML("beforeend",o),d?d.refresh():d=new v("#results-container a",{captionsData:"alt",captionDelay:250,captionPosition:"bottom"})}function E(){const t=document.querySelector("#results-container");t.innerHTML=""}function L(){const t=document.getElementById("loader");t.style.display="block"}function b(){const t=document.getElementById("loader");t.style.display="none"}function S(){g.classList.remove("hidden")}function c(){g.classList.add("hidden")}const q=document.getElementById("load-more-btn"),$=document.querySelector(".form"),R=document.querySelector(".search-input"),y=document.getElementById("load-more");let u="",a=1;const m=40;let p=0;$.addEventListener("submit",async t=>{t.preventDefault();const o=R.value.trim();if(o){u=o,a=1,L(),E(),c();try{const e=await f(u,a);if(p=Math.ceil(e.totalHits/m),!e||!e.hits||e.hits.length===0){i.warning({title:"Uyarı",message:"Sorry, there are no images matching your search query. Please try again!",position:"topRight"});return}h(e),y.style.display="flex",y.style.justifyContent="center",e.totalHits<=m||a>=p?c():S()}catch{i.error({title:"Hata",message:"Bir sorun oluştu. Lütfen daha sonra tekrar deneyin.",position:"topRight"})}finally{b()}}});q.addEventListener("click",async()=>{a++,L();try{const t=await f(u,a);if(!t||!t.hits||t.hits.length===0){i.warning({title:"Uyarı",message:"Sorry, there are no images matching your search query. Please try again!",position:"topRight"}),c();return}h(t),(a>=p||t.hits.length<m)&&(c(),i.info({position:"topRight",message:"We're sorry, but you've reached the end of search results"}));const o=document.querySelector(".image-card");if(o){const{height:e}=o.getBoundingClientRect();window.scrollBy({top:e*2,behavior:"smooth"})}}catch{i.error({title:"Hata",message:"Daha fazla resim yüklenemedi.",position:"topRight"})}finally{b()}});
+//# sourceMappingURL=index.js.map
